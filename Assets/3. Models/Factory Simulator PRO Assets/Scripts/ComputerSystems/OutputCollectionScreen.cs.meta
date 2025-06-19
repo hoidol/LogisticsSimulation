@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5eb30d105569ee54389319a7608db827
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272558
+  packageName: Factory Simulator (PRO)
+  packageVersion: 1.2
+  assetPath: Assets/Factory Simulator PRO Assets/Scripts/ComputerSystems/OutputCollectionScreen.cs
+  uploadId: 700828

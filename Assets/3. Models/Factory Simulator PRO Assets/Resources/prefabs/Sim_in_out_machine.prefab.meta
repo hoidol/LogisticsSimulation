@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ccab4d229c181d3479cb152653b245a8
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272558
+  packageName: Factory Simulator (PRO)
+  packageVersion: 1.2
+  assetPath: Assets/Factory Simulator PRO Assets/Resources/prefabs/Sim_in_out_machine.prefab
+  uploadId: 700828

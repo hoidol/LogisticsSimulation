@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7802388fcbce7134e9eae31a1c9c1a6d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272558
+  packageName: Factory Simulator (PRO)
+  packageVersion: 1.2
+  assetPath: Assets/Factory Simulator PRO Assets/Scripts/Interface/IFlipable.cs
+  uploadId: 700828

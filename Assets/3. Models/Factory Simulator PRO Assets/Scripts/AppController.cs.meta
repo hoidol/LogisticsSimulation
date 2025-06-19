@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c1fa15d929ba9c2478db8d2ec2009353
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272558
+  packageName: Factory Simulator (PRO)
+  packageVersion: 1.2
+  assetPath: Assets/Factory Simulator PRO Assets/Scripts/AppController.cs
+  uploadId: 700828

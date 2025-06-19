@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: bdb8f19d95caa9d4cbacb2062e29901e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272558
+  packageName: Factory Simulator (PRO)
+  packageVersion: 1.2
+  assetPath: Assets/Factory Simulator PRO Assets/Scripts/Transform/TranslatorObject.cs
+  uploadId: 700828

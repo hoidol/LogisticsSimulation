@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a19c13a40aee0a646b91e300ae5b4c06
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272558
+  packageName: Factory Simulator (PRO)
+  packageVersion: 1.2
+  assetPath: Assets/Factory Simulator PRO Assets/Resources/prefabs/Sim_Item_Maker.prefab
+  uploadId: 700828

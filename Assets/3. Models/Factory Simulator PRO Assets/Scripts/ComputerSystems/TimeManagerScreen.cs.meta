@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d833b5704105a6f41a1ab577c845386e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272558
+  packageName: Factory Simulator (PRO)
+  packageVersion: 1.2
+  assetPath: Assets/Factory Simulator PRO Assets/Scripts/ComputerSystems/TimeManagerScreen.cs
+  uploadId: 700828

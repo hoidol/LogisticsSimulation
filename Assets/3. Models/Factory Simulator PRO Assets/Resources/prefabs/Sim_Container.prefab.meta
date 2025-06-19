@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: e050040d30b82be4698f1e5b507bd354
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272558
+  packageName: Factory Simulator (PRO)
+  packageVersion: 1.2
+  assetPath: Assets/Factory Simulator PRO Assets/Resources/prefabs/Sim_Container.prefab
+  uploadId: 700828
