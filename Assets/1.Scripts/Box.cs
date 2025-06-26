@@ -6,4 +6,11 @@ public class Box : MonoBehaviour
     public float width = 0.235f;
     public float height = 0.2f;
     public float deeth = 0.18f;
+
+    public ProductData productData;
+    public void SetProductData(ProductData productData)
+    {
+        this.productData = productData;
+    }
 }
+
