@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class EditModePanel : MonoBehaviour
 {
@@ -8,12 +9,14 @@ public class EditModePanel : MonoBehaviour
     public GameObject adjustMachinePanel;
 
     public AddMachinePanel[] addMachinePanels;
-
+    [SerializeField] TMP_InputField inputField_id;
 
     private void Awake()
     {
-        addMachinePanels = GetComponentsInChildren<AddMachinePanel>();
+        Debug.Log("EditModePanel");
+        //addMachinePanels = GetComponentsInChildren<AddMachinePanel>();
     }
+
     public void StartEditMode()
     {
         gameObject.SetActive(true);
@@ -32,7 +35,6 @@ public class EditModePanel : MonoBehaviour
             addingMachinePanel.SetActive(false);
             adjustMachinePanel.SetActive(false);
 
-
             foreach (var panel in addMachinePanels)
             {
                 panel.UpdatePanel();
@@ -49,7 +51,20 @@ public class EditModePanel : MonoBehaviour
             addMachinePanel.SetActive(false);
             addingMachinePanel.SetActive(false);
             adjustMachinePanel.SetActive(true);
+
+
+
+            inputField_id.text = EditMode.Instanace.targetMachine.id;
         }
 
+    }
+    
+    public void OnClicekdEditId()
+    {
+        if (string.IsNullOrEmpty(inputField_id.text))
+            return;
+        Debug.Log($"EditModePanel OnClicekdEditId() {inputField_id.text}");
+        EditMode.Instanace.targetMachine.id = inputField_id.text;
+        MachineManager.Instance.Save();
     }
 }

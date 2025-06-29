@@ -66,7 +66,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.3, y: 0.3, z: 0.3}
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4911146172294637567
 GameObject:
@@ -116,17 +116,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd866066fae22474fb1c2f8fc8c9fda6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  simulationObjectType: 0
   machineName: 0
+  id: 
   linkPoints:
   - {fileID: 1955651197668649030}
   - {fileID: 5445112987965849699}
   boxes: []
-  startTr: {fileID: 1955651197668649030}
-  endTr: {fileID: 5445112987965849699}
-  speed: 0.2
+  startLinkPoint: {fileID: 1955651197668649030}
+  endLinkPoint: {fileID: 5445112987965849699}
+  moveSpeed: 0.7
   prePoint: {fileID: 0}
   nextPoint: {fileID: 0}
   sidePoints: []
+  direction: {x: 0, y: 0, z: 0}
 --- !u!65 &5740259957930840133
 BoxCollider:
   m_ObjectHideFlags: 0

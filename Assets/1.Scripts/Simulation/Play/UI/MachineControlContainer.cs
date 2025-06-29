@@ -8,10 +8,17 @@ public class MachineControlContainer : MonoBehaviour
 
     public void Init()
     {
+        if(machineControlPanels == null || machineControlPanels.Length <=0)
+            machineControlPanels = GetComponentsInChildren<MachineControlPanel>();
+
+    }
+
+    public void UpdateControl()
+    {
         List<Machine> machines = MachineManager.Instance.GetMachines(machineName);
-        for(int i= 0;i< machineControlPanels.Length; i++)
+        for (int i = 0; i < machineControlPanels.Length; i++)
         {
-            if(i < machines.Count)
+            if (i < machines.Count)
             {
                 machineControlPanels[i].SetMachine(machines[i]);
                 machineControlPanels[i].gameObject.SetActive(true);
@@ -20,10 +27,9 @@ public class MachineControlContainer : MonoBehaviour
             {
                 machineControlPanels[i].gameObject.SetActive(false);
             }
-            
+
         }
     }
-
     public void SetMachineControl(MachineName key)
     {
         gameObject.SetActive(machineName == key);

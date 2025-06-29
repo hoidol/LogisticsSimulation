@@ -5,22 +5,49 @@ public class Conveyor : Machine
 {
     public LinkPoint startLinkPoint; //
     public LinkPoint endLinkPoint;
-    public float speed = 0.2f;
+    public float moveSpeed = 0.2f;
 
     //수정 모드에서 설정됨
     //public List<Conveyor> conveyorsToAsrs; // asrs로 향하는 연결된 컨베이어 
+    public Machine preMachine; //이전 연결점 
+    public Machine nextMachine; // 
 
-    public LinkPoint prePoint; //이전 연결점 
-    public LinkPoint nextPoint; // 
+    public List<LinkPoint> sidePoints = new List<LinkPoint>(); //옆 부분
+    public Vector3 direction;
+    public override void Init(string id)
+    {
+        base.Init(id);
+        EditMachine();
+    }
 
-    public List<LinkPoint> sidePoints = new List<LinkPoint>();; //옆 부분
+    public override void EditMachine()
+    {
+        base.EditMachine();
+        direction = transform.rotation.eulerAngles;// transform.right;// (endLinkPoint.transform.position - startLinkPoint.transform.position).normalized;
+    }
 
     public override void PlaySimulation()
     {
         base.PlaySimulation();
 
-        prePoint = startLinkPoint.Link();
-        nextPoint = endLinkPoint.Link();
+        //prePoint = startLinkPoint.Link();
+        LinkPoint nextPoint = endLinkPoint.Link();
+
+        if (nextPoint == null)
+        {
+            Collider[] cols = Physics.OverlapBox(transform.position, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.identity, LayerMask.GetMask("Machine"));
+            for(int i =0;i< cols.Length; i++)
+            {
+                Machine machine = cols[i].GetComponent<Machine>();
+                if (machine == this)
+                    continue;
+                
+                endLinkPoint.machine = nextMachine;
+                nextMachine = machine;
+                break;
+            }
+        }
+
 
         //SideLink 확인하기
         //닿아있는 것 중
@@ -31,11 +58,6 @@ public class Conveyor : Machine
     public void CheckSideLink()
     {
         BoxCollider box = GetComponent<BoxCollider>();
-
-        //box 콜리더에 닿아있는 LinkPoint 레이어를 가진 충돌채 찾아서
-        //LinkPoint[] cols 배열 변수에 담고
-        // startLinkPoint, endLinkPoint,prePoint,nextPoint 는 제외해서
-        //sidePoints에 담아줘
 
         sidePoints.Clear(); // 기존 데이터 초기화
         Collider[] colliders = Physics.OverlapBox(
@@ -51,11 +73,9 @@ public class Conveyor : Machine
             if (link == null) continue;
 
             // 시작/끝/앞/뒤 포인트는 제외
-            if (link == startLinkPoint || link == endLinkPoint || link == prePoint || link == nextPoint)
+            if (link == startLinkPoint || link == endLinkPoint)
                 continue;
 
-            //옆으로 연결된 링크 포인트 중 시작 방향인 것만 sidePoints 담기
-            //이유 : 그쪽으로는 흘려보내야되므로, 반대 방향은 들어오기만해서 괜찮음
             Conveyor conveyor = link.GetComponentInParent<Conveyor>(); 
             if(conveyor != null)
             {
@@ -77,6 +97,8 @@ public class Conveyor : Machine
         else
             box.transform.position = startLinkPoint.transform.position;
 
+        box.transform.parent = transform;
+        box.transform.forward = direction;
         boxes.Add(box);
     }
 
@@ -98,7 +120,7 @@ public class Conveyor : Machine
         if (boxes.Count <= 0)
             return;
 
-        Vector3 direction = (endLinkPoint.transform.position - startLinkPoint.transform.position).normalized;
+        
 
         for (int i = boxes.Count - 1; i >= 0; i--)
         {
@@ -107,7 +129,7 @@ public class Conveyor : Machine
             Vector3 target = endLinkPoint.transform.position;
 
             // 이동
-            Vector3 nextPos = current + direction * speed * Time.deltaTime;
+            Vector3 nextPos = current + direction * moveSpeed * Time.deltaTime;
 
             if (Vector3.Distance(current, target) > 0.01f)
             {
@@ -115,17 +137,17 @@ public class Conveyor : Machine
             }
             else
             {
+
                 // ✅ 도착 지점 도달 → 다음 컨베이어로 이동 시도
-                if (nextPoint != null)
+                if (nextMachine != null)
                 {
                     //Vector3 nextPosOnNextConveyor = nextPoint.machine.startTr.transform.position;
-
                     //if (nextPoint.machine.CanLoad(nextPosOnNextConveyor))
-                    //{
-                        
+                    //{ 
                     //}
                     boxes.RemoveAt(i);
-                    nextPoint.machine.Load(box, box.transform.position);
+                    nextMachine.Load(box, box.transform.position);
+                    i--;
                     // 공간이 없으면 계속 대기
                 }
             }

@@ -1,13 +1,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Machine : MonoBehaviour
+public abstract class Machine : SimulationObject
 {
     public MachineName machineName;  // 장비 구분자
+    public string id;
+
     [Header("수동으로 지정")]
     public LinkPoint[] linkPoints;
-
     public List<Box> boxes = new List<Box>();
+
+    public virtual void Init(string id)
+    {
+        this.id = id;
+    }
+
+    public virtual void EditMachine()
+    {
+
+    }
+
+    public virtual void ViewDetail(bool on)
+    {
+
+    }
+
+    
 
     public virtual void PlaySimulation()
     {
@@ -16,6 +34,7 @@ public abstract class Machine : MonoBehaviour
              linkPoints[i].Link();
         }
     }
+
     public virtual void StopSimulation()
     {
 
@@ -33,10 +52,10 @@ public abstract class Machine : MonoBehaviour
 }
 public enum MachineName
 {
-    Conveyor,
-    AGV,
-    ASRSLooped,
-    Workbay,
-    RobotControl,
+    Conveyor, //C_i
+    AGV, //AGV_i
+    ASRSLooped, //ASRS_i
+    Workbay, //Workbay - W_i
+    RobotControl, //RC_i
     Count
 }

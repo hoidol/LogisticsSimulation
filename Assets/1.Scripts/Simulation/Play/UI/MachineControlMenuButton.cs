@@ -14,6 +14,11 @@ public class MachineControlMenuButton : MonoBehaviour
         barImage.gameObject.SetActive(machineName == name);
     }
 
+    public void UpdateButton()
+    {
+        
+    }
+
     public void OnClickedButton()
     {
         GetComponentInParent<PlayModePanel>().SetMachineControl(machineName);

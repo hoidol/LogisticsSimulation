@@ -10,8 +10,7 @@ public class EditMode: SimulationMode
     //기기 배치 수정
     private void Awake()
     {
-        Instanace = this;
-        
+        Instanace = this;   
     }
 
     //public string newMachineKey;
@@ -27,8 +26,7 @@ public class EditMode: SimulationMode
 
     public override void EndMode()
     {
-        editModePanel.EndEditMode();
-        
+        editModePanel.EndEditMode();   
     }
 
     //머신 추가하려고 버튼 누름
@@ -39,12 +37,7 @@ public class EditMode: SimulationMode
             targetMachine = null;
             return;
         }
-        // machineKey에 해당하는 Machine 생성하기
-
-        //newMachineKey = machineKey;
-        Machine prefab = Resources.Load<Machine>(machineName.ToString());
-        targetMachine = Instantiate(prefab);
-
+        targetMachine = MachineManager.Instance.Instantiate(machineName);
         SetEditMode(EditModeType.Adding);
     }
 
@@ -96,7 +89,7 @@ public class EditMode: SimulationMode
         {
             if (Input.GetKeyDown(KeyCode.Escape) )
             {
-                Destroy(targetMachine.gameObject);
+                MachineManager.Instance.Remove(targetMachine);
                 targetMachine = null;
                 SetEditMode(EditModeType.Add);
             }
@@ -125,9 +118,11 @@ public class EditMode: SimulationMode
         if (Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Ground")))
         {
             targetMachine.transform.position = new Vector3(hit.point.x, 0, hit.point.z);
+            
             if (Input.GetMouseButtonDown(0))
             {
                 MachineManager.Instance.AddMachine(targetMachine);
+                Edited();
                 targetMachine = null;
                 SetEditMode(EditModeType.Add);
             }
@@ -136,11 +131,13 @@ public class EditMode: SimulationMode
         if (Input.GetKeyDown(KeyCode.Q))
         {
             targetMachine.transform.Rotate(0f, -90f, 0f);
+            Edited(); 
         }
         // E 키: Y축 시계 방향 회전
         else if (Input.GetKeyDown(KeyCode.E))
         {
             targetMachine.transform.Rotate(0f, 90f, 0f);
+            Edited(); 
         }
     }
 
@@ -155,11 +152,33 @@ public class EditMode: SimulationMode
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(ray, out RaycastHit hit, 50, LayerMask.GetMask("Machine")))
+            RaycastHit hit;
+            if (!Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Machine")))
             {
                 targetMachine = null;
                 SetEditMode(EditModeType.Add);
                 return;
+            }
+            else
+            {
+                Machine machine = hit.collider.GetComponent<Machine>();
+                if(machine != null)
+                {
+                    if (targetMachine != machine)
+                    {
+                        targetMachine = machine;
+                        editModePanel.UpdatePanel();
+                    }
+
+                    if (Physics.Raycast(ray, out RaycastHit groundHit, 50, LayerMask.GetMask("Ground")))
+                    {
+                        dragOffset = targetMachine.transform.position - groundHit.point;
+                        isDragging = true;
+
+                        return;
+                    }
+                }
+                
             }
         }
 
@@ -175,6 +194,7 @@ public class EditMode: SimulationMode
                 targetMachine.transform.position = newPos;
                 if (Input.GetMouseButtonDown(0))
                 {
+                    Edited(); 
                     targetMachine = null;
                     SetEditMode(EditModeType.Add);
                 }
@@ -185,11 +205,13 @@ public class EditMode: SimulationMode
         if (Input.GetKeyDown(KeyCode.Q))
         {
             targetMachine.transform.Rotate(0f, -90f, 0f);
+            Edited();
         }
         // E 키: Y축 시계 방향 회전
         else if (Input.GetKeyDown(KeyCode.E))
         {
             targetMachine.transform.Rotate(0f, 90f, 0f);
+            Edited();
         }
     }
 
@@ -198,8 +220,16 @@ public class EditMode: SimulationMode
         if (targetMachine == null)
             return;
 
-        Destroy(targetMachine.gameObject);
+        MachineManager.Instance.Remove(targetMachine);
         SetEditMode(EditModeType.Add);
+    }
+
+    //무언가가 수정됐을때 호출되는 함수
+    public void Edited()
+    {
+        if (targetMachine != null)
+            targetMachine.EditMachine();
+        MachineManager.Instance.Save();
     }
 
     public void ClosedDetail()
@@ -214,13 +244,4 @@ public enum EditModeType
     Add, 
     Adjust,
     Adding //추가중
-}
-
-[System.Serializable]
-public class MachineSaveData
-{
-    public string key;
-
-    public Vector3 position;
-    public Vector3 rotation;
 }

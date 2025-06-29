@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayMode : SimulationMode
 {
@@ -46,6 +47,9 @@ public class PlayMode : SimulationMode
         if (SimulationManager.Instance.simulationModeType != SimulationModeType.Play)
             return;
 
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
         if (Input.GetMouseButton(1))
             return;
 
@@ -59,31 +63,49 @@ public class PlayMode : SimulationMode
             if (Input.GetMouseButtonDown(0))
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (!Physics.Raycast(ray, out RaycastHit hit, 50, LayerMask.GetMask("Machine")))
+                if (Physics.Raycast(ray, out RaycastHit hit, 50, LayerMask.GetMask("Machine")))
                 {
                     targetMachine = hit.collider.GetComponent<Machine>();
-                    SetPlayMode(PlayModeType.Detail);
-                    MachineDetailCanvas.Instance.ShowDetail(targetMachine);
+                    ShowDetail(targetMachine);
+                    playModePanel.SetMachineControl(targetMachine.machineName);
                     return;
-                }else if (!Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Box")))
+                }else if (Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Box")))
                 {
                     targetBox = hit.collider.GetComponent<Box>();
-                    SetPlayMode(PlayModeType.Detail);
-                    BoxDetailCanvas.Instance.ShowDetail(targetBox);
+                    ShowDetail(targetBox);
                     return;
                 }
             }
         }
+    }
+
+    public void ShowDetail(SimulationObject obj)
+    {
+        if (targetMachine != null)
+            targetMachine.ViewDetail(false);
+
+        targetMachine = obj as Machine;
+        if (obj.simulationObjectType == SimulationObjectType.Machine)
+        {
+            targetMachine.ViewDetail(true);
+            MachineDetailCanvas.Instance.ShowDetail(targetMachine);
+        }
         else
         {
-            
+            BoxDetailCanvas.Instance.ShowDetail(targetBox);
         }
+        SetPlayMode(PlayModeType.Detail);
     }
+    
 
     public void ClosedDetail()
     {
         if (SimulationManager.Instance.simulationModeType != SimulationModeType.Play)
             return;
+
+        if(targetMachine != null)
+            targetMachine.ViewDetail(false);
+
         targetBox = null;
         targetMachine = null;
         SetPlayMode(PlayModeType.View);

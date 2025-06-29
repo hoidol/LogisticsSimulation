@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using TMPro;
 public class MachineDetailCanvas : MonoBehaviour
 {
 
@@ -14,8 +14,9 @@ public class MachineDetailCanvas : MonoBehaviour
         }
     }
 
+    [SerializeField] TMP_Text machineNameText;
+    [SerializeField] TMP_Text machineIdText;
     public MachineDetailPanel[] machineDetailPanels;
-
     public MachineDetailPanel GetMachineDetailPanel(MachineName name)
     {
         for (int i = 0; i < machineDetailPanels.Length; i++)
@@ -33,8 +34,12 @@ public class MachineDetailCanvas : MonoBehaviour
         {
             machineDetailPanels[i].gameObject.SetActive(false);
         }
-
+        machineNameText.text = machine.machineName.ToString();
+        machineIdText.text = machine.id.ToString();
         MachineDetailPanel panel = GetMachineDetailPanel(machine.machineName);
+        if (panel == null)
+            return;
+
         panel.SetMachine(machine);
         panel.gameObject.SetActive(true);
     }

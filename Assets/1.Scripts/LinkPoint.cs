@@ -15,13 +15,34 @@ public class LinkPoint : MonoBehaviour
     //이거를 Edit 모드에서 마우스를 땠을때 호출해도 괜찮네
     public LinkPoint Link() 
     {
-        Collider[] cols = Physics.OverlapBox(transform.position, new Vector3(0.3f, 0.3f, 0.3f),Quaternion.identity, LayerMask.GetMask("LinkPoint"));
+        Collider[] cols = Physics.OverlapBox(transform.position, new Vector3(0.5f, 0.5f, 0.5f),Quaternion.identity, LayerMask.GetMask("LinkPoint"));
 
         if (cols.Length <= 0)
             return null;
 
-        linkedPoint = cols[0].GetComponent<LinkPoint>();
-        return linkedPoint;
+         for(int i =0;i< cols.Length; i++)
+        {
+            LinkPoint linkPoint = cols[i].GetComponent<LinkPoint>();
+            if (linkPoint.machine == machine)
+                continue;
+            //방향이 다르면 못하게 처리 
+            if( machine is Conveyor && linkPoint.machine is Conveyor)
+            {
+                if((linkPoint.machine as Conveyor).direction != (machine as Conveyor).direction)
+                {
+                    continue;
+                }
+            }
+
+
+            
+                
+
+            linkedPoint = linkPoint;
+            return linkPoint;
+        }
+        return null;
+        
     }
 
 

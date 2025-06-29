@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4764616924581018393}
   - component: {fileID: 5445112987965849699}
-  m_Layer: 0
+  - component: {fileID: 8859874280855563945}
+  m_Layer: 8
   m_Name: End_LinkPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,6 +45,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b050460163b8a43b7bd6c4f00404872f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  machine: {fileID: 0}
+  linkedPoint: {fileID: 0}
+--- !u!65 &8859874280855563945
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 130067753307797545}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4911146172294637567
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,8 +116,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b797ae3f7364b4bdebc85db6a14f2753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: HandmadePlace
-  conveyor: {fileID: 0}
+  simulationObjectType: 0
+  machineName: 3
+  id: 
+  linkPoints:
+  - {fileID: 1955651197668649030}
+  - {fileID: 5445112987965849699}
+  boxes: []
+  startLinkPoint: {fileID: 1955651197668649030}
+  endLinkPoint: {fileID: 5445112987965849699}
+  moveSpeed: 0.7
+  prePoint: {fileID: 0}
+  nextPoint: {fileID: 0}
+  sidePoints: []
+  direction: {x: 0, y: 0, z: 0}
   processSpeed: 2
 --- !u!65 &8385979187179299282
 BoxCollider:
@@ -126,7 +162,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3709038768867426459}
   - component: {fileID: 1955651197668649030}
-  m_Layer: 0
+  - component: {fileID: 6262929322849016564}
+  m_Layer: 8
   m_Name: Start_LinkPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,6 +197,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b050460163b8a43b7bd6c4f00404872f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  machine: {fileID: 0}
+  linkedPoint: {fileID: 0}
+--- !u!65 &6262929322849016564
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8368320209545673810}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5135296358918726701
 PrefabInstance:
   m_ObjectHideFlags: 0

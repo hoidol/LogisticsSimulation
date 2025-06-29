@@ -11,11 +11,20 @@ public class PlayModePanel : MonoBehaviour
     {
         if (init)
             return;
+        controlContainers = GetComponentsInChildren<MachineControlContainer>(true);
+        menuButtons = GetComponentsInChildren<MachineControlMenuButton>(true);
+
+        for (int i =0;i< controlContainers.Length; i++)
+        {
+            controlContainers[i].Init();
+        }
+        
         init = true;
     }
     
     public void SetMachineControl(MachineName name)
     {
+        Debug.Log($"PlayModePanel SetMachineControl {name}");
         for (int i = 0; i < menuButtons.Length; i++)
         {
             menuButtons[i].SetMachineControl(name);
@@ -30,10 +39,13 @@ public class PlayModePanel : MonoBehaviour
 
     public void StartPlayMode()
     {
+        Init();
+
         gameObject.SetActive(true);
         for (int i = 0; i < menuButtons.Length; i++)
         {
-            controlContainers[i].Init();
+            menuButtons[i].UpdateButton();
+               controlContainers[i].UpdateControl();
         }
         SetMachineControl(MachineName.ASRSLooped);
     }

@@ -1,14 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-public class Workbay : Machine
+public class Workbay : Conveyor
 {
-    public Conveyor conveyor;
     public float processSpeed =2; //처리 속도
-
+    //public float moveSpeed = 0.2f;
+    //[SerializeField] Vector3 direction;
     public override void PlaySimulation()
     {
         base.PlaySimulation();
+        Debug.Log("Workbay PlaySimulation() 함수 호출 ");
+        sidePoints.Clear(); 
         StartCoroutine(CoProcess());
     }
 
@@ -30,7 +32,6 @@ public class Workbay : Machine
             }
             yield return null;
             timer += Time.deltaTime;
-            
         }
     }
 
@@ -42,8 +43,12 @@ public class Workbay : Machine
 
         Box box = Instantiate(Resources.Load<Box>("Box"));
         box.SetProductData(productData);
-        conveyor.Load(box, Vector3.zero);
+        //Conveyor conveyor = endLinkPoint.GetComponentInParent<Conveyor>();
+
+        Load(box, Vector3.zero);
     }
+
+
     
 
 }

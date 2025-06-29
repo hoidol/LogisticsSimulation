@@ -8,5 +8,9 @@ public class AGV : Machine
     public Transform cameraTr;
     public string agvKey; //AGV 간의 구분자 - 추가될때마다 
 
+    public override void ViewDetail(bool on)
+    {
+        cameraTr.gameObject.SetActive(on);
+    }
     
 }
