@@ -592,8 +592,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8befd0859c9794f5a9869b79726ebe31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  simulationObjectType: 0
   machineName: 2
-  linkPoints: []
+  id: 
+  linkPoints:
+  - {fileID: 1089974644855851513}
+  - {fileID: 8575398430163148999}
   boxes: []
   asrsLoopedKey: 
   speed: 2

@@ -22,41 +22,33 @@ public class Conveyor : Machine
 
     public override void EditMachine()
     {
+        direction = transform.rotation.eulerAngles;
         base.EditMachine();
-        direction = transform.rotation.eulerAngles;// transform.right;// (endLinkPoint.transform.position - startLinkPoint.transform.position).normalized;
+        // transform.right;// (endLinkPoint.transform.position - startLinkPoint.transform.position).normalized;
     }
 
-    public override void PlaySimulation()
-    {
-        base.PlaySimulation();
 
-        //prePoint = startLinkPoint.Link();
+    public override void CheckLink()
+    {
+        base.CheckLink();
+        Debug.Log($"Conveyor CheckLink () {id}");
         LinkPoint nextPoint = endLinkPoint.Link();
 
         if (nextPoint == null)
         {
-            Collider[] cols = Physics.OverlapBox(transform.position, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.identity, LayerMask.GetMask("Machine"));
-            for(int i =0;i< cols.Length; i++)
+            Collider[] cols = Physics.OverlapBox(endLinkPoint.transform.position, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.identity, LayerMask.GetMask("Machine"));
+            for (int i = 0; i < cols.Length; i++)
             {
                 Machine machine = cols[i].GetComponent<Machine>();
                 if (machine == this)
                     continue;
-                
-                endLinkPoint.machine = nextMachine;
+
+                //endLinkPoint. = nextMachine;
                 nextMachine = machine;
                 break;
             }
         }
 
-
-        //SideLink 확인하기
-        //닿아있는 것 중
-        CheckSideLink();
-    }
-
-
-    public void CheckSideLink()
-    {
         BoxCollider box = GetComponent<BoxCollider>();
 
         sidePoints.Clear(); // 기존 데이터 초기화

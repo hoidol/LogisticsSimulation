@@ -22,13 +22,18 @@ public class CameraManager : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             Cursor.lockState = CursorLockMode.Locked;
-            
             cameraInfoCanvas.SetActive(true);
+
+            if(SimulationManager.Instance.simulationModeType == SimulationModeType.Edit)
+            {
+                LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
+            }
         }
         else if (Input.GetMouseButtonUp(1))
         {
             Cursor.lockState = CursorLockMode.None;
             cameraInfoCanvas.SetActive(false);
+            
         }
 
         // 우클릭 상태에서만 카메라 회전/이동

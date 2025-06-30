@@ -13,11 +13,15 @@ public abstract class Machine : SimulationObject
     public virtual void Init(string id)
     {
         this.id = id;
+        for(int i =0;i< linkPoints.Length; i++)
+        {
+            linkPoints[i].Init();
+        }
     }
 
     public virtual void EditMachine()
     {
-
+        CheckLink();
     }
 
     public virtual void ViewDetail(bool on)
@@ -25,16 +29,19 @@ public abstract class Machine : SimulationObject
 
     }
 
-    
 
     public virtual void PlaySimulation()
     {
-        for(int i =0;i< linkPoints.Length; i++)
-        {
-             linkPoints[i].Link();
-        }
+        CheckLink();
     }
 
+    public virtual void CheckLink()
+    {
+        for (int i = 0; i < linkPoints.Length; i++)
+        {
+            linkPoints[i].Link();
+        }
+    }
     public virtual void StopSimulation()
     {
 

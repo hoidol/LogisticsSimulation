@@ -19,13 +19,14 @@ public class EditMode: SimulationMode
     public override void StartMode()
     {
         editModePanel.StartEditMode();
-        
+        LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
         targetMachine = null;
         SetEditMode(EditModeType.Add);
     }
 
     public override void EndMode()
     {
+        LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
         editModePanel.EndEditMode();   
     }
 
@@ -45,6 +46,8 @@ public class EditMode: SimulationMode
     {
         editModeType = type;
         editModePanel.UpdatePanel();
+
+        
     }
 
     Vector3 dragOffset;
@@ -77,6 +80,7 @@ public class EditMode: SimulationMode
                     if (clickedMachine != null)
                     {
                         targetMachine = clickedMachine;
+                        LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
                         dragOffset = targetMachine.transform.position - groundHit.point;
                         isDragging = true;
                         SetEditMode(EditModeType.Adjust);
@@ -156,6 +160,7 @@ public class EditMode: SimulationMode
             if (!Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Machine")))
             {
                 targetMachine = null;
+                LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
                 SetEditMode(EditModeType.Add);
                 return;
             }
@@ -164,9 +169,11 @@ public class EditMode: SimulationMode
                 Machine machine = hit.collider.GetComponent<Machine>();
                 if(machine != null)
                 {
+                    LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
                     if (targetMachine != machine)
                     {
                         targetMachine = machine;
+                        LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
                         editModePanel.UpdatePanel();
                     }
 
@@ -192,15 +199,15 @@ public class EditMode: SimulationMode
                 Vector3 newPos = hit.point + dragOffset;
                 newPos.y = 0;
                 targetMachine.transform.position = newPos;
-                if (Input.GetMouseButtonDown(0))
-                {
-                    Edited(); 
-                    targetMachine = null;
-                    SetEditMode(EditModeType.Add);
-                }
+                
             }
         }
-
+        if (Input.GetMouseButtonUp(0))
+        {
+            Edited();
+            //targetMachine = null;
+            //SetEditMode(EditModeType.Add);
+        }
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -221,6 +228,7 @@ public class EditMode: SimulationMode
             return;
 
         MachineManager.Instance.Remove(targetMachine);
+        LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
         SetEditMode(EditModeType.Add);
     }
 
@@ -228,7 +236,26 @@ public class EditMode: SimulationMode
     public void Edited()
     {
         if (targetMachine != null)
-            targetMachine.EditMachine();
+        {
+            //targetMachine.EditMachine();
+
+            BoxCollider box = targetMachine.GetComponent<BoxCollider>();
+
+            //sidePoints.Clear(); // 기존 데이터 초기화
+            Collider[] colliders = Physics.OverlapBox(
+                box.bounds.center,
+                box.bounds.extents*1.1f,
+                transform.rotation,
+                LayerMask.GetMask("Machine")
+            );
+            for(int i =0;i< colliders.Length; i++)
+            {
+                colliders[i].GetComponent<Machine>().EditMachine();
+            }
+
+            LinkIndicatorCanvas.Instance.ShowLink(targetMachine);
+        }
+            
         MachineManager.Instance.Save();
     }
 
