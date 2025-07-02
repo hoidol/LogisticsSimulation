@@ -41,24 +41,21 @@ public class LinkIndicatorCanvas : MonoBehaviour
         foreach (var indicator in linkIndicators)
             indicator.gameObject.SetActive(false);
         linkPoints.AddRange(machine.linkPoints);
-        if(machine is Conveyor)
+        for (int i = 0; i < machine.linkedPoints.Count; i++)
         {
-            linkPoints.AddRange(((Conveyor)machine).sidePoints);
-        }
-        for (int i = 0; i < machine.linkPoints.Length; i++)
-        {
-            LinkPoint linkPoint = machine.linkPoints[i];
+            LinkPoint linkedPoint = machine.linkedPoints[i];
             LinkIndicator indicator = linkIndicators[i];
 
             // 월드 좌표 → 스크린 좌표
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(linkPoint.transform.position);
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(linkedPoint.transform.position);
 
             // 스크린 좌표 → RectTransform 위치
             RectTransform rect = indicator.GetComponent<RectTransform>();
             rect.position = screenPos;
 
+
             // 색상 처리
-            indicator.SetColor(linkPoint.linkedPoint != null ? linkedColor : unlinkedColor);
+            indicator.SetColor(linkedPoint.linkedMachines.Count >0 ? linkedColor : unlinkedColor);
 
             // 활성화
             indicator.gameObject.SetActive(true);

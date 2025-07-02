@@ -1,10 +1,22 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LinkPoint : MonoBehaviour
 {
-    public Machine machine; //연결점의 현재 장비
-    public LinkPoint linkedPoint; //현재 연결된 포인트
-
+    //현재 연결 포인트 닿아있는 머신 체크
+    [SerializeField] private Machine machine; //연결점의 현재 장비
+    public Machine Machine
+    {
+        get
+        {
+            if(machine == null)
+                machine = GetComponentInParent<Machine>();
+            return machine;
+        }
+    }
+    public List<Machine> linkedMachines = new List<Machine>();
+    
+    public TransferDirection transferDirection;
     bool init;
     public void Init()
     {
@@ -16,61 +28,72 @@ public class LinkPoint : MonoBehaviour
     }
 
     //이거를 Edit 모드에서 마우스를 땠을때 호출해도 괜찮네
-    public LinkPoint Link() 
+    public void Link() 
     {
         Init();
-        Debug.Log($"LinkPoint Link() 1 machine id {machine.id}");
-        Collider[] cols = Physics.OverlapBox(transform.position, new Vector3(0.5f, 0.5f, 0.5f),Quaternion.identity, LayerMask.GetMask("LinkPoint"));
+        Collider[] cols = Physics.OverlapBox(transform.position,new Vector3( 0.3f,3f,0.3f),Quaternion.identity, LayerMask.GetMask("Machine"));
 
-        Debug.Log($"LinkPoint Link() 2 cols.Length {cols.Length}");
+        linkedMachines.Clear();
+        //Debug.Log($"LinkPoint Link() machine id {machine.id} cols.Length {cols.Length}");
         if (cols.Length <= 0)
-            return null;
+            return;
 
          for(int i =0;i< cols.Length; i++)
         {
-            LinkPoint linkPoint = cols[i].GetComponent<LinkPoint>();
-            if (linkPoint.machine == machine)
+            Machine linkedMachine = cols[i].GetComponent<Machine>();
+            if (machine == linkedMachine)
             {
-                Debug.Log($"LinkPoint Link() 3 if (linkPoint.machine == machine)");
+                //Debug.Log($"같은 머신 제외");
                 continue;
-                
-            }
-                
-            //방향이 다르면 못하게 처리 
-            if( machine is Conveyor && linkPoint.machine is Conveyor)
-            {
-                if((linkPoint.machine as Conveyor).direction != (machine as Conveyor).direction)
-                {
-                    Debug.Log($"LinkPoint Link() 3 direction != direction");
-                    continue;
-                }
             }
 
-            Debug.Log($"LinkPoint Link() 4 링크 완료 ");
-            linkedPoint = linkPoint;
-            return linkPoint;
+            linkedMachines.Add(linkedMachine);
         }
-        Debug.Log($"LinkPoint Link() 5 링크 불가 null ");
-        return null;
+        
         
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (SimulationManager.Instance.simulationModeType == SimulationModeType.Edit)
+            return;
 
-    //public bool canLink; 
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (linkedPoint != null)
-    //        return;
+        if (machine.machineName != MachineName.Conveyor)
+            return;
 
-    //    if (collision.CompareTag("LinkPoint"))
-    //    {
-    //         LinkPoint linkPoint = GetComponent<LinkPoint>();
-    //        if (linkPoint.machine == machine)//같은 기기임
-    //            return;
-    //        canLink = true; 
-    //        //machine의 위치를 
-    //    }
-    //}
+        if (other.CompareTag("Box"))
+        {
+            Box box = other.GetComponent<Box>();
+
+            if (box == null)
+                return;
+
+            //나가는거에 부딪혔을때랑 들어오는거에 부딪혔을때랑 다르지
+            if (transferDirection == TransferDirection.In)
+            {
+                //Debug.Log($"다른 컨테이너로 이동하기!");
+                //Debug.Log($"box.productData.asrs_id {box.productData.asrs_id}");
+                //Debug.Log($"machine.destinationId {machine.destinationId}");
+
+                if (box.productData.asrs_id == machine.destinationId)
+                {
+                    //box- 현재 있는 장비를 참조하게
+                    box.machine.Unload(box, machine);
+                }
+            }
+            else
+            {
+                //박스가 있는 장비의 끝에 도착한 경우
+                if (box.machine == machine)
+                {
+                    //Debug.Log("LinkPoint if (box.machine == machine)");
+                    machine.Unload(box, machine.nextMachine);
+                }
+
+            }
+        }
+    }
+   
 
     //private void OnTriggerExit2D(Collider2D collision)
     //{
@@ -83,4 +106,9 @@ public class LinkPoint : MonoBehaviour
     //        //machine의 위치를 
     //    }
     //}
+}
+public enum TransferDirection
+{
+    In,   // 입고 방향
+    Out   // 출고 방향
 }

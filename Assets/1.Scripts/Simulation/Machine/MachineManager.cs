@@ -25,6 +25,8 @@ public class MachineManager : MonoBehaviour, ISimulation
         machineInfos[2] = new MachineInfo() { machineName = MachineName.ASRSLooped, prefix = "ASRS_" };
         machineInfos[3] = new MachineInfo() { machineName = MachineName.Workbay, prefix = "W_" };
         machineInfos[4] = new MachineInfo() { machineName = MachineName.RobotControl, prefix = "RC_" };
+        machineInfos[5] = new MachineInfo() { machineName = MachineName.OutPoint, prefix = "OP_" };
+        machineInfos[6] = new MachineInfo() { machineName = MachineName.AGVPickUpPoint, prefix = "AGVPPoint_" };
 
         machineDB = SaveManager.LoadData<MachineDB>("MachineDB");
         if (machineDB == null)
@@ -51,17 +53,23 @@ public class MachineManager : MonoBehaviour, ISimulation
             Machine machine = Instantiate(machineDB.machineSaveDatas[i].machineName);
             machine.transform.position = machineDB.machineSaveDatas[i].position;
             machine.transform.rotation = Quaternion.Euler( machineDB.machineSaveDatas[i].rotation);
-            machine.Init(machineDB.machineSaveDatas[i].id);
+            machine.Init(machineDB.machineSaveDatas[i]);
             AddMachine(machine);
         }
+        Invoke("CheckLink", 0.2f);
     }
 
+    void CheckLink()
+    {
+        allMachines.ForEach(e => e.CheckLink());
+    }
     public void StartMode(SimulationModeType type)
     {
         if(type == SimulationModeType.Play)
         {
             foreach(var machineList in machineDic)
             {
+                machineList.Value.ForEach(m => m.CheckLink());
                 machineList.Value.ForEach(m => m.PlaySimulation());
             }
         }
@@ -109,7 +117,10 @@ public class MachineManager : MonoBehaviour, ISimulation
                 id = info.prefix + Random.Range(0, 10000).ToString("D4"); // 0000 ~ 9999 형식
             } while (existingIds.Contains(id));
 
-            machine.Init(id);
+            MachineSaveData saveData = new MachineSaveData();
+            machineDB.machineSaveDatas.Add(saveData);
+            saveData.id = id;
+            machine.Init(saveData);
         }
         
     }
@@ -121,6 +132,7 @@ public class MachineManager : MonoBehaviour, ISimulation
 
     public void Remove(Machine machine)
     {
+        machineDB.machineSaveDatas.Remove(machine.machineSaveData);
         machineDic[machine.machineName].Remove(machine);
         allMachines.Remove(machine);
         Destroy(machine.gameObject);
@@ -129,18 +141,19 @@ public class MachineManager : MonoBehaviour, ISimulation
     
     public void Save()
     {
-        //MachineSaveData[] machineSaveDatas = new MachineSaveData[allMachines.Count];
-        machineDB.machineSaveDatas.Clear();
-        for (int i =0;i< allMachines.Count; i++)
-        {
-            MachineSaveData saveData = new MachineSaveData();
-            saveData.machineName = allMachines[i].machineName;
-            saveData.id = allMachines[i].id;
-            saveData.position = allMachines[i].transform.position;
-            saveData.rotation = allMachines[i].transform.rotation.eulerAngles;
-            machineDB.machineSaveDatas.Add( saveData);
-        }
         
+        machineDB.machineSaveDatas.Clear();
+        for (int i = 0; i < allMachines.Count; i++)
+        { 
+            machineDB.machineSaveDatas.Add(allMachines[i].machineSaveData);
+
+            allMachines[i].machineSaveData.machineName = allMachines[i].machineName;
+            allMachines[i].machineSaveData.position = allMachines[i].transform.position;
+            allMachines[i].machineSaveData.rotation = allMachines[i].transform.rotation.eulerAngles;
+            allMachines[i].machineSaveData.destinationId = allMachines[i].destinationId;
+ 
+        }
+
         SaveManager.SaveData("MachineDB", machineDB);
     }
 
@@ -158,6 +171,9 @@ public class MachineSaveData
     public MachineName machineName;
     public Vector3 position;
     public Vector3 rotation;
+
+    public string destinationId;
+    
 }
 
 public class MachineInfo

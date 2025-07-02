@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - LinkPoint
+  - Machine
+  - Box
   layers:
   - Default
   - TransparentFX

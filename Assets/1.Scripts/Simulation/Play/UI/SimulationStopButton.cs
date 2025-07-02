@@ -13,6 +13,7 @@ public class SimulationStopButton : MonoBehaviour
     public void OnClickedPlay()
     {
         SimulationManager.Instance.SetMode(SimulationModeType.Edit);
+        PlayMode.Instanace.ClosedDetail();
 
     }
 }

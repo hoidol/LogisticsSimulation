@@ -274,8 +274,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ASRSLoopedControlPanel, Assembly-CSharp
+      - m_Target: {fileID: 537174024805564805}
+        m_TargetAssemblyTypeName: WorkBayControlPanel, Assembly-CSharp
         m_MethodName: OnClickedUp
         m_Mode: 1
         m_Arguments:
@@ -815,8 +815,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ASRSLoopedControlPanel, Assembly-CSharp
+      - m_Target: {fileID: 537174024805564805}
+        m_TargetAssemblyTypeName: WorkBayControlPanel, Assembly-CSharp
         m_MethodName: OnClickedDown
         m_Mode: 1
         m_Arguments:

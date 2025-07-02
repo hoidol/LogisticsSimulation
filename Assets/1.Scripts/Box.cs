@@ -12,5 +12,12 @@ public class Box : SimulationObject
     {
         this.productData = productData;
     }
+    public Machine machine;
+
+    public void Loaded(Machine m)
+    {
+        machine = m;
+        transform.parent = machine.transform;
+    }
 }
 

@@ -62,6 +62,9 @@ public class EditMode: SimulationMode
         if (Input.GetMouseButton(1))
             return;
 
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
         if (editModeType == EditModeType.Add)
         {
             //추가 모드에서 기존에 추가된 기기 클릭 시 - 클릭한 기기를 수정할 수 있게
@@ -83,6 +86,7 @@ public class EditMode: SimulationMode
                         LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
                         dragOffset = targetMachine.transform.position - groundHit.point;
                         isDragging = true;
+                        targetMachine.Drag(true);
                         SetEditMode(EditModeType.Adjust);
                     }
                 }
@@ -107,6 +111,8 @@ public class EditMode: SimulationMode
         }
         else if (editModeType == EditModeType.Adjust)
         {
+            
+
             Adjust();
         }
     }
@@ -116,7 +122,6 @@ public class EditMode: SimulationMode
     {
         if (targetMachine == null)
             return;
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Ground")))
@@ -126,6 +131,7 @@ public class EditMode: SimulationMode
             if (Input.GetMouseButtonDown(0))
             {
                 MachineManager.Instance.AddMachine(targetMachine);
+                targetMachine.Drag(false);
                 Edited();
                 targetMachine = null;
                 SetEditMode(EditModeType.Add);
@@ -153,12 +159,20 @@ public class EditMode: SimulationMode
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            targetMachine = null;
+            SetEditMode(EditModeType.Add);
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (!Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Machine")))
             {
+                targetMachine.Drag(false);
                 targetMachine = null;
                 LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
                 SetEditMode(EditModeType.Add);
@@ -169,19 +183,22 @@ public class EditMode: SimulationMode
                 Machine machine = hit.collider.GetComponent<Machine>();
                 if(machine != null)
                 {
+                    
                     LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
                     if (targetMachine != machine)
                     {
+                        targetMachine.Drag(false);
                         targetMachine = machine;
-                        LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
                         editModePanel.UpdatePanel();
                     }
+
+
+                    targetMachine.Drag(true);
 
                     if (Physics.Raycast(ray, out RaycastHit groundHit, 50, LayerMask.GetMask("Ground")))
                     {
                         dragOffset = targetMachine.transform.position - groundHit.point;
                         isDragging = true;
-
                         return;
                     }
                 }
@@ -204,6 +221,7 @@ public class EditMode: SimulationMode
         }
         if (Input.GetMouseButtonUp(0))
         {
+            targetMachine.Drag(false);
             Edited();
             //targetMachine = null;
             //SetEditMode(EditModeType.Add);
@@ -237,11 +255,8 @@ public class EditMode: SimulationMode
     {
         if (targetMachine != null)
         {
-            //targetMachine.EditMachine();
-
             BoxCollider box = targetMachine.GetComponent<BoxCollider>();
 
-            //sidePoints.Clear(); // 기존 데이터 초기화
             Collider[] colliders = Physics.OverlapBox(
                 box.bounds.center,
                 box.bounds.extents*1.1f,

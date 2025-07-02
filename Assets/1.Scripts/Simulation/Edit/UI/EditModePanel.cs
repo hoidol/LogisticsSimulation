@@ -11,9 +11,12 @@ public class EditModePanel : MonoBehaviour
     public AddMachinePanel[] addMachinePanels;
     [SerializeField] TMP_InputField inputField_id;
 
+    [SerializeField] AdjustDetailContainer detailContainer;
+
     private void Awake()
     {
-        Debug.Log("EditModePanel");
+        //Debug.Log("EditModePanel");
+        detailContainer = GetComponentInChildren<AdjustDetailContainer>(true);
         //addMachinePanels = GetComponentsInChildren<AddMachinePanel>();
     }
 
@@ -57,12 +60,16 @@ public class EditModePanel : MonoBehaviour
             inputField_id.text = EditMode.Instanace.targetMachine.id;
         }
 
+
+        detailContainer.SetMachine(EditMode.Instanace.targetMachine);
+
     }
     
     public void OnClicekdEditId()
     {
         if (string.IsNullOrEmpty(inputField_id.text))
             return;
+
         Debug.Log($"EditModePanel OnClicekdEditId() {inputField_id.text}");
         EditMode.Instanace.targetMachine.id = inputField_id.text;
         MachineManager.Instance.Save();

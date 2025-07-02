@@ -5,13 +5,42 @@ public class ProductManager : MonoBehaviour
 {
     public static ProductManager Instance;
 
-    
+    //public List<Box> boxes = new List<Box>();
+    public List<Box> boxesInPool = new List<Box>();
+
     [SerializeField] List<ProductData> productDatas = new List<ProductData>();
     private void Awake()
     {
         Instance = this;
-        string csv = Resources.Load<TextAsset>("CSV/Product").text;
-       ParseCSV(csv);
+    }
+
+    public void StartMode(SimulationModeType type)
+    {
+        if(type == SimulationModeType.Play)
+        {
+            string csv = Resources.Load<TextAsset>("CSV/Product").text;
+            ParseCSV(csv);
+        }
+
+        boxesInPool.ForEach(e => e.gameObject.SetActive(false));
+    }
+
+
+    public Box GetBox()
+    {
+        for(int i =0;i< boxesInPool.Count; i++)
+        {
+            if (!boxesInPool[i].gameObject.activeSelf)
+            {
+                boxesInPool[i].gameObject.SetActive(true);
+                return boxesInPool[i];
+            }
+        }
+
+
+        Box box = Instantiate(Resources.Load<Box>("Box"));
+        boxesInPool.Add(box);
+        return box;
     }
 
     void ParseCSV(string csv)
@@ -30,10 +59,15 @@ public class ProductManager : MonoBehaviour
 
             ProductData data = new ProductData();
             data.id = tokens[0];
-            data.asrs_no = tokens[1];
+            data.asrs_id = tokens[1];
 
             productDatas.Add(data);
         }
+    }
+
+    public void RemoveBox(Box b)
+    {
+        b.gameObject.SetActive(false);
     }
 
     //ProductData 중 하나를 가져옴
@@ -46,10 +80,11 @@ public class ProductManager : MonoBehaviour
 
         return next;
     }
+
 }
 [System.Serializable]
 public class ProductData
 {
     public string id;
-    public string asrs_no;
+    public string asrs_id;
 }

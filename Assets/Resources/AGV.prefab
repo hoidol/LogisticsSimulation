@@ -223,6 +223,37 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
+--- !u!1 &5170016210072753647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5177559873583793009}
+  m_Layer: 6
+  m_Name: TopPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5177559873583793009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5170016210072753647}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.414, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7318378321981873045}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8535859965554914126
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +267,7 @@ GameObject:
   - component: {fileID: 2989021825488243374}
   m_Layer: 6
   m_Name: AGV
-  m_TagString: Untagged
+  m_TagString: Machine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -256,6 +287,7 @@ Transform:
   m_Children:
   - {fileID: 4505316914843654519}
   - {fileID: 192243568770466826}
+  - {fileID: 5177559873583793009}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7509167951772358844
@@ -273,10 +305,15 @@ MonoBehaviour:
   simulationObjectType: 0
   machineName: 1
   id: 
+  destinationId: 
   linkPoints: []
+  linkedPoints: []
   boxes: []
+  nextMachine: {fileID: 0}
   cameraTr: {fileID: 192243568770466826}
-  agvKey: 
+  topPoint: {fileID: 5177559873583793009}
+  moveSpeed: 1
+  loadedBox: {fileID: 0}
 --- !u!65 &2989021825488243374
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -296,8 +333,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5285089, y: 0.4484444, z: 0.6356598}
-  m_Center: {x: 0, y: 0.20460935, z: -0.0017834902}
+  m_Size: {x: 0.49979782, y: 0.4484444, z: 0.59210205}
+  m_Center: {x: -0.005458832, y: 0.20460935, z: 0.012917519}
 --- !u!1001 &7623992889253546549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -324,7 +361,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6290337902905742146, guid: 4d6fc51541a33f940ba6bfa3f340d858, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6290337902905742146, guid: 4d6fc51541a33f940ba6bfa3f340d858, type: 3}
       propertyPath: m_LocalRotation.y
@@ -332,7 +369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6290337902905742146, guid: 4d6fc51541a33f940ba6bfa3f340d858, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6290337902905742146, guid: 4d6fc51541a33f940ba6bfa3f340d858, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

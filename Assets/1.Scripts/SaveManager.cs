@@ -14,14 +14,14 @@ public class SaveManager
 #else
         string path = Path.Combine(Application.persistentDataPath, fName);
 #endif
-        Debug.Log($"데이터 로드 경로 : {path}");
+        //Debug.Log($"데이터 로드 경로 : {path}");
         if (!File.Exists(path))
         {
             File.Create(path).Close();
         }
 
         string ToJsonData = JsonUtility.ToJson(data, true);
-        Debug.Log(ToJsonData);
+        //Debug.Log(ToJsonData);
         File.WriteAllText(path, ToJsonData);
     }
 

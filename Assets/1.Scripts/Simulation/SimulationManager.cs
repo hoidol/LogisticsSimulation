@@ -47,6 +47,7 @@ public class SimulationManager : MonoBehaviour
         GetSimulationMode(SimulationModeType.Edit).EndMode();
         GetSimulationMode(SimulationModeType.Play).StartMode();
         MachineManager.Instance.StartMode(SimulationModeType.Play);
+        ProductManager.Instance.StartMode(SimulationModeType.Play);
     }
 
     public void StopSimulation()
@@ -54,7 +55,8 @@ public class SimulationManager : MonoBehaviour
         GetSimulationMode(SimulationModeType.Play).EndMode();
         GetSimulationMode(SimulationModeType.Edit).StartMode();
         MachineManager.Instance.StartMode(SimulationModeType.Edit);
-        
+        ProductManager.Instance.StartMode(SimulationModeType.Edit);
+
     }
 
 }

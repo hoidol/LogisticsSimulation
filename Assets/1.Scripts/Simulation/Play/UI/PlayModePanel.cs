@@ -24,7 +24,7 @@ public class PlayModePanel : MonoBehaviour
     
     public void SetMachineControl(MachineName name)
     {
-        Debug.Log($"PlayModePanel SetMachineControl {name}");
+        //Debug.Log($"PlayModePanel SetMachineControl {name}");
         for (int i = 0; i < menuButtons.Length; i++)
         {
             menuButtons[i].SetMachineControl(name);
