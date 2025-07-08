@@ -8,14 +8,9 @@ public class Conveyor : Machine
     public LinkPoint endLinkPoint;
     public float moveSpeed = 0.2f;
 
-    //수정 모드에서 설정됨
-    //public List<Conveyor> conveyorsToAsrs; // asrs로 향하는 연결된 컨베이어 
-    //public Machine preMachine; //이전 연결점 
-    //public LinkPoint nextLinkPoint; // 
-
     
     public Vector3 direction;
-    //public string asrsLoodedId; //
+    
 
     public override void Init(MachineSaveData data)
     {

@@ -6,6 +6,7 @@ public class EditMode: SimulationMode
     public EditModePanel editModePanel;
 
     public EditModeType editModeType;
+    public GroundGrid groundGrid;
     //기기 신규 추가
     //기기 배치 수정
     private void Awake()
@@ -20,12 +21,15 @@ public class EditMode: SimulationMode
     {
         editModePanel.StartEditMode();
         LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
+
+        groundGrid.gameObject.SetActive(true);
         targetMachine = null;
         SetEditMode(EditModeType.Add);
     }
 
     public override void EndMode()
     {
+        groundGrid.gameObject.SetActive(false);
         LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
         editModePanel.EndEditMode();   
     }

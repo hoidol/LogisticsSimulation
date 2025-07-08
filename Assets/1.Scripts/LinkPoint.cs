@@ -18,13 +18,21 @@ public class LinkPoint : MonoBehaviour
     
     public TransferDirection transferDirection;
     bool init;
+    public bool isConveyor;
+    private void Awake()
+    {
+        Init();
+    }
+
     public void Init()
     {
         if (init)
             return;
+        
         init = true;
         gameObject.tag = "LinkPoint";
         machine = GetComponentInParent<Machine>();
+        isConveyor = machine is Conveyor;
     }
 
     //이거를 Edit 모드에서 마우스를 땠을때 호출해도 괜찮네
@@ -58,7 +66,7 @@ public class LinkPoint : MonoBehaviour
         if (SimulationManager.Instance.simulationModeType == SimulationModeType.Edit)
             return;
 
-        if (machine.machineName != MachineName.Conveyor)
+        if (!isConveyor)
             return;
 
         if (other.CompareTag("Box"))
@@ -71,10 +79,6 @@ public class LinkPoint : MonoBehaviour
             //나가는거에 부딪혔을때랑 들어오는거에 부딪혔을때랑 다르지
             if (transferDirection == TransferDirection.In)
             {
-                //Debug.Log($"다른 컨테이너로 이동하기!");
-                //Debug.Log($"box.productData.asrs_id {box.productData.asrs_id}");
-                //Debug.Log($"machine.destinationId {machine.destinationId}");
-
                 if (box.productData.asrs_id == machine.destinationId)
                 {
                     //box- 현재 있는 장비를 참조하게

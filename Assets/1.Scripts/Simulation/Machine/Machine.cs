@@ -115,5 +115,7 @@ public enum MachineName
     RobotControl, //RC_i
     OutPoint, //OP_i
     AGVPickUpPoint,
+    ConveyorShort,
+    Forklift,
     Count
 }

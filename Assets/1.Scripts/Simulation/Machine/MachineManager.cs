@@ -27,7 +27,11 @@ public class MachineManager : MonoBehaviour, ISimulation
         machineInfos[4] = new MachineInfo() { machineName = MachineName.RobotControl, prefix = "RC_", name = "로봇 컨트롤러" };
         machineInfos[5] = new MachineInfo() { machineName = MachineName.OutPoint, prefix = "OP_", name = "출고지" };
         machineInfos[6] = new MachineInfo() { machineName = MachineName.AGVPickUpPoint, prefix = "AGVPPoint_", name = "AGV 상품 수령지" };
+        machineInfos[7] = new MachineInfo() { machineName = MachineName.ConveyorShort, prefix = "ConS_", name = "컨베이어 S" };
+        machineInfos[8] = new MachineInfo() { machineName = MachineName.Forklift, prefix = "FL_", name = "지게차" };
 
+
+        
         machineDB = SaveManager.LoadData<MachineDB>("MachineDB");
         if (machineDB == null)
         {
