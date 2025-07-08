@@ -51,10 +51,6 @@ public abstract class Machine : SimulationObject
         CheckLink();
     }
 
-    public virtual void ViewDetail(bool on)
-    {
-
-    }
 
 
     public virtual void PlaySimulation()
@@ -92,7 +88,7 @@ public abstract class Machine : SimulationObject
     }
     public virtual void StopSimulation()
     {
-
+        boxes.Clear();
     }
 
     public virtual void Load(Box box, Vector3 pos)
@@ -115,7 +111,7 @@ public enum MachineName
     Conveyor, //C_i
     AGV, //AGV_i
     ASRSLooped, //ASRS_i
-    Workbay, //Workbay - W_i
+    Workstation, //Workbay - W_i
     RobotControl, //RC_i
     OutPoint, //OP_i
     AGVPickUpPoint,

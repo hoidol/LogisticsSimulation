@@ -20,13 +20,13 @@ public class MachineManager : MonoBehaviour, ISimulation
         }
 
         machineInfos = new MachineInfo[(int)MachineName.Count];
-        machineInfos[0] = new MachineInfo() { machineName = MachineName.Conveyor, prefix = "C_" };
-        machineInfos[1] = new MachineInfo() { machineName = MachineName.AGV, prefix = "AGV_" };
-        machineInfos[2] = new MachineInfo() { machineName = MachineName.ASRSLooped, prefix = "ASRS_" };
-        machineInfos[3] = new MachineInfo() { machineName = MachineName.Workbay, prefix = "W_" };
-        machineInfos[4] = new MachineInfo() { machineName = MachineName.RobotControl, prefix = "RC_" };
-        machineInfos[5] = new MachineInfo() { machineName = MachineName.OutPoint, prefix = "OP_" };
-        machineInfos[6] = new MachineInfo() { machineName = MachineName.AGVPickUpPoint, prefix = "AGVPPoint_" };
+        machineInfos[0] = new MachineInfo() { machineName = MachineName.Conveyor, prefix = "C_" ,name="컨베이어"};
+        machineInfos[1] = new MachineInfo() { machineName = MachineName.AGV, prefix = "AGV_", name = "AGV" };
+        machineInfos[2] = new MachineInfo() { machineName = MachineName.ASRSLooped, prefix = "ASRS_", name = "ASRSLooped" };
+        machineInfos[3] = new MachineInfo() { machineName = MachineName.Workstation, prefix = "W_", name = "Workstation" };
+        machineInfos[4] = new MachineInfo() { machineName = MachineName.RobotControl, prefix = "RC_", name = "로봇 컨트롤러" };
+        machineInfos[5] = new MachineInfo() { machineName = MachineName.OutPoint, prefix = "OP_", name = "출고지" };
+        machineInfos[6] = new MachineInfo() { machineName = MachineName.AGVPickUpPoint, prefix = "AGVPPoint_", name = "AGV 상품 수령지" };
 
         machineDB = SaveManager.LoadData<MachineDB>("MachineDB");
         if (machineDB == null)
@@ -36,7 +36,7 @@ public class MachineManager : MonoBehaviour, ISimulation
         }
     }
 
-    MachineInfo GetMachineInfo(MachineName machineName)
+    public MachineInfo GetMachineInfo(MachineName machineName)
     {
         foreach(var d in machineInfos)
         {
@@ -180,4 +180,5 @@ public class MachineInfo
 {
     public MachineName machineName;
     public string prefix;
+    public string name;
 }

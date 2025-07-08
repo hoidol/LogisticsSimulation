@@ -12,6 +12,13 @@ public class AGV : Machine
 
     public float moveSpeed;
 
+    [SerializeField] Box loadedBox;
+
+    [SerializeField] OutPoint nearestOutPoint = null;
+    [SerializeField] AGVPickUpPoint nearestPickUpPoint;
+    [SerializeField] bool moving;
+    [SerializeField] bool standbying;
+
     public override void PlaySimulation()
     {
         base.PlaySimulation();
@@ -22,7 +29,16 @@ public class AGV : Machine
     {
         base.StopSimulation();
         StopAllCoroutines();
+
+        standbying = false;
+        moving = false;
+
+        loadedBox = null;
+        nearestOutPoint = null;
+        nearestPickUpPoint = null;
+
     }
+
     public override void ViewDetail(bool on)
     {
         cameraTr.gameObject.SetActive(on);
@@ -55,12 +71,6 @@ public class AGV : Machine
         }
     }
 
-    [SerializeField] Box loadedBox;
-
-    [SerializeField] OutPoint nearestOutPoint = null;
-    [SerializeField] AGVPickUpPoint nearestPickUpPoint;
-    [SerializeField] bool moving;
-    [SerializeField] bool standbying;
 
 
     public override void Load(Box box, Vector3 pos)

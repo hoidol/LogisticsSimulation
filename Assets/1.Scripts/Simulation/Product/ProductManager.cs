@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 public class ProductManager : MonoBehaviour
 {
     public static ProductManager Instance;
 
-    //public List<Box> boxes = new List<Box>();
     public List<Box> boxesInPool = new List<Box>();
-
     [SerializeField] List<ProductData> productDatas = new List<ProductData>();
     private void Awake()
     {
@@ -22,7 +20,10 @@ public class ProductManager : MonoBehaviour
             ParseCSV(csv);
         }
 
-        boxesInPool.ForEach(e => e.gameObject.SetActive(false));
+        boxesInPool.ForEach(e => {
+            e.machine = null;
+            e.gameObject.SetActive(false);
+            });
     }
 
 
@@ -81,6 +82,11 @@ public class ProductManager : MonoBehaviour
         return next;
     }
 
+
+    public List<Box> GetBoxes()
+    {
+        return boxesInPool.Where(e => e.gameObject.activeSelf).ToList(); 
+    }
 }
 [System.Serializable]
 public class ProductData

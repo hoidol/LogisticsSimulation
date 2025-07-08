@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PlayModePanel : MonoBehaviour
 {
-    [SerializeField] MachineControlContainer[] controlContainers;
-    [SerializeField] MachineControlMenuButton[] menuButtons;
+    [SerializeField] ObjectControlContainer[] controlContainers;
+    [SerializeField] ObjectControlMenuButton[] menuButtons;
 
 
     bool init;
@@ -11,8 +11,8 @@ public class PlayModePanel : MonoBehaviour
     {
         if (init)
             return;
-        controlContainers = GetComponentsInChildren<MachineControlContainer>(true);
-        menuButtons = GetComponentsInChildren<MachineControlMenuButton>(true);
+        controlContainers = GetComponentsInChildren<ObjectControlContainer>(true);
+        menuButtons = GetComponentsInChildren<ObjectControlMenuButton>(true);
 
         for (int i =0;i< controlContainers.Length; i++)
         {
@@ -22,14 +22,23 @@ public class PlayModePanel : MonoBehaviour
         init = true;
     }
     
-    public void SetMachineControl(MachineName name)
+    public void SetControl(string name)
     {
-        //Debug.Log($"PlayModePanel SetMachineControl {name}");
-        for (int i = 0; i < menuButtons.Length; i++)
+        bool have = false;
+        for(int i =0;i< controlContainers.Length; i++)
         {
-            menuButtons[i].SetMachineControl(name);
-            controlContainers[i].SetMachineControl(name);
+            if (controlContainers[i].objName == name)
+                have = true;
         }
+        if (have)
+        {
+            for (int i = 0; i < menuButtons.Length; i++)
+            {
+                menuButtons[i].SetControlButton(name);
+                controlContainers[i].SetControlContainer(name);
+            }
+        }
+        
     }
 
     public void UpdatePanel()
@@ -45,9 +54,9 @@ public class PlayModePanel : MonoBehaviour
         for (int i = 0; i < menuButtons.Length; i++)
         {
             menuButtons[i].UpdateButton();
-               controlContainers[i].UpdateControl();
+            controlContainers[i].UpdateControl();
         }
-        SetMachineControl(MachineName.ASRSLooped);
+        SetControl(MachineName.ASRSLooped.ToString());
     }
 
     public void EndPlayMode()

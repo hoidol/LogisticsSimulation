@@ -1,21 +1,26 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class MachineControlContainer : MonoBehaviour
+public class MachineControlContainer : ObjectControlContainer
 {
     public MachineName machineName;
     public MachineControlPanel[] machineControlPanels;
 
-    public void Init()
+    public TMP_Text countText;
+
+    public override void Init()
     {
+        objName = machineName.ToString();
         if(machineControlPanels == null || machineControlPanels.Length <=0)
             machineControlPanels = GetComponentsInChildren<MachineControlPanel>();
 
     }
 
-    public void UpdateControl()
+    public override void UpdateControl()
     {
         List<Machine> machines = MachineManager.Instance.GetMachines(machineName);
+        countText.text = string.Format("{0}EA 가동중", machines.Count);
         for (int i = 0; i < machineControlPanels.Length; i++)
         {
             if (i < machines.Count)
@@ -30,16 +35,8 @@ public class MachineControlContainer : MonoBehaviour
 
         }
     }
-    public void SetMachineControl(MachineName key)
-    {
-        gameObject.SetActive(machineName == key);
-        if(machineName == key)
-        {
-            UpdateContainer();
-        }
-    }
 
-    public void UpdateContainer()
+    public override void UpdateContainer()
     {
         for(int i =0;i< machineControlPanels.Length; i++)
         {

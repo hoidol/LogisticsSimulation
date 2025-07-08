@@ -34,6 +34,7 @@ public class PlayMode : SimulationMode
     public void SetPlayMode(PlayModeType type)
     {
         playModeType = type;
+
         UpdateMode();
     }
 
@@ -63,18 +64,26 @@ public class PlayMode : SimulationMode
             if (Input.GetMouseButtonDown(0))
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit, 50, LayerMask.GetMask("Machine")))
-                {
-                    targetMachine = hit.collider.GetComponent<Machine>();
-                    ShowDetail(targetMachine);
-                    playModePanel.SetMachineControl(targetMachine.machineName);
-                    return;
-                }else if (Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Box")))
+                if (Physics.Raycast(ray, out RaycastHit hit, 200, LayerMask.GetMask("Box")))
                 {
                     targetBox = hit.collider.GetComponent<Box>();
+
                     ShowDetail(targetBox);
+                    playModePanel.SetControl("Box");
                     return;
                 }
+                else if (Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("Machine")))
+                {
+                    Machine machine = hit.collider.GetComponent<Machine>();
+                    //if (machine.machineName == MachineName.Conveyor || machine.machineName == MachineName.RobotControl||)
+                    //    return;
+
+
+                    targetMachine = machine;
+                    ShowDetail(targetMachine);
+                    playModePanel.SetControl(targetMachine.machineName.ToString());
+                    return;
+                } 
             }
         }
     }
@@ -84,16 +93,23 @@ public class PlayMode : SimulationMode
         if (targetMachine != null)
             targetMachine.ViewDetail(false);
 
-        targetMachine = obj as Machine;
+        if (targetBox != null)
+            targetBox.ViewDetail(false);
+
+
         if (obj.simulationObjectType == SimulationObjectType.Machine)
         {
+            targetMachine = obj as Machine;
             targetMachine.ViewDetail(true);
             MachineDetailCanvas.Instance.ShowDetail(targetMachine);
         }
-        else
+        else if (obj.simulationObjectType == SimulationObjectType.Box)
         {
+            targetBox = obj as Box;
+            targetBox.ViewDetail(true);
             BoxDetailCanvas.Instance.ShowDetail(targetBox);
         }
+
         SetPlayMode(PlayModeType.Detail);
     }
     
@@ -105,6 +121,9 @@ public class PlayMode : SimulationMode
 
         if(targetMachine != null)
             targetMachine.ViewDetail(false);
+
+        if (targetBox != null)
+            targetBox.ViewDetail(false);
 
         targetBox = null;
         targetMachine = null;

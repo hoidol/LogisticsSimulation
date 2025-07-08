@@ -52,6 +52,13 @@ public class EditMode: SimulationMode
 
     Vector3 dragOffset;
     bool isDragging = false;
+
+    public void SetTarget(Machine machine)
+    {
+        targetMachine?.Focus(false);
+        targetMachine = machine;
+        targetMachine?.Focus(true);
+    }
     private void Update()
     {
         if (SimulationManager.Instance.simulationModeType != SimulationModeType.Edit)
@@ -75,14 +82,14 @@ public class EditMode: SimulationMode
             if (Input.GetMouseButtonDown(0))
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit, 50, LayerMask.GetMask("Machine"))
-                    && Physics.Raycast(ray, out RaycastHit groundHit, 50, LayerMask.GetMask("Ground"))
+                if (Physics.Raycast(ray, out RaycastHit hit, 200, LayerMask.GetMask("Machine"))
+                    && Physics.Raycast(ray, out RaycastHit groundHit, 200, LayerMask.GetMask("Ground"))
                     )
                 {
                     Machine clickedMachine = hit.collider.GetComponent<Machine>();
                     if (clickedMachine != null)
                     {
-                        targetMachine = clickedMachine;
+                        SetTarget(clickedMachine);
                         LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
                         dragOffset = targetMachine.transform.position - groundHit.point;
                         isDragging = true;
@@ -91,14 +98,13 @@ public class EditMode: SimulationMode
                     }
                 }
             }
-            
         }
         else if(editModeType == EditModeType.Adding)
         {
             if (Input.GetKeyDown(KeyCode.Escape) )
             {
                 MachineManager.Instance.Remove(targetMachine);
-                targetMachine = null;
+                SetTarget(null);
                 SetEditMode(EditModeType.Add);
             }
 
@@ -124,7 +130,7 @@ public class EditMode: SimulationMode
             return;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Ground")))
+        if (Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("Ground")))
         {
             targetMachine.transform.position = new Vector3(hit.point.x, 0, hit.point.z);
             
@@ -133,22 +139,13 @@ public class EditMode: SimulationMode
                 MachineManager.Instance.AddMachine(targetMachine);
                 targetMachine.Drag(false);
                 Edited();
-                targetMachine = null;
+                SetTarget(null);
                 SetEditMode(EditModeType.Add);
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            targetMachine.transform.Rotate(0f, -90f, 0f);
-            Edited(); 
-        }
-        // E 키: Y축 시계 방향 회전
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            targetMachine.transform.Rotate(0f, 90f, 0f);
-            Edited(); 
-        }
+
+        RotationControl();
     }
 
     
@@ -165,15 +162,22 @@ public class EditMode: SimulationMode
             SetEditMode(EditModeType.Add);
             return;
         }
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            MachineManager.Instance.Remove(targetMachine);
+            SetTarget(null);
+            SetEditMode(EditModeType.Add);
+            return;
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (!Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Machine")))
+            if (!Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("Machine")))
             {
                 targetMachine.Drag(false);
-                targetMachine = null;
+                SetTarget(null);
                 LinkIndicatorCanvas.Instance.gameObject.SetActive(false);
                 SetEditMode(EditModeType.Add);
                 return;
@@ -188,14 +192,14 @@ public class EditMode: SimulationMode
                     if (targetMachine != machine)
                     {
                         targetMachine.Drag(false);
-                        targetMachine = machine;
+                        SetTarget(machine);
                         editModePanel.UpdatePanel();
                     }
 
 
                     targetMachine.Drag(true);
 
-                    if (Physics.Raycast(ray, out RaycastHit groundHit, 50, LayerMask.GetMask("Ground")))
+                    if (Physics.Raycast(ray, out RaycastHit groundHit, 200, LayerMask.GetMask("Ground")))
                     {
                         dragOffset = targetMachine.transform.position - groundHit.point;
                         isDragging = true;
@@ -211,7 +215,7 @@ public class EditMode: SimulationMode
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 50, LayerMask.GetMask("Ground")))
+            if (Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("Ground")))
             {
                 Vector3 newPos = hit.point + dragOffset;
                 newPos.y = 0;
@@ -227,15 +231,27 @@ public class EditMode: SimulationMode
             //SetEditMode(EditModeType.Add);
         }
 
+        RotationControl();
+    }
+
+    void RotationControl()
+    {
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            targetMachine.transform.Rotate(0f, -90f, 0f);
+            if (Input.GetKey(KeyCode.LeftShift))
+                targetMachine.transform.Rotate(0f, -90f, 0f);
+            else
+                targetMachine.transform.Rotate(0f, -45f, 0f);
             Edited();
         }
         // E 키: Y축 시계 방향 회전
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            targetMachine.transform.Rotate(0f, 90f, 0f);
+            if (Input.GetKey(KeyCode.LeftShift))
+                targetMachine.transform.Rotate(0f, 90f, 0f);
+            else
+                targetMachine.transform.Rotate(0f, 45f, 0f);
             Edited();
         }
     }

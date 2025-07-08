@@ -183,6 +183,9 @@ MonoBehaviour:
   rayBias:
     m_OverrideState: 0
     m_Value: 0.001
+  distantRayBias:
+    m_OverrideState: 0
+    m_Value: 0.001
   extendShadowCulling:
     m_OverrideState: 0
     m_Value: 0
@@ -204,6 +207,9 @@ MonoBehaviour:
   cullingDistance:
     m_OverrideState: 0
     m_Value: 1000
+  minSolidAngle:
+    m_OverrideState: 0
+    m_Value: 4
 --- !u!114 &8896021737368581315
 MonoBehaviour:
   m_ObjectHideFlags: 3

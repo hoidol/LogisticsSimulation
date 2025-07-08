@@ -21,6 +21,7 @@ public class ASRSLooped : Machine
     {
         base.StopSimulation();
         StopAllCoroutines();
+        productDatas.Clear();
     }
     public override void CheckLink()
     {
@@ -55,6 +56,8 @@ public class ASRSLooped : Machine
             Box box = ProductManager.Instance.GetBox();
             box.SetProductData(productData);
 
+            if(nextMachine != null)
+                Debug.Log($"ASRS Looped Load Unload 직전 nextMachine id {nextMachine.id}");
 
             Unload(box,nextMachine);
         }
@@ -63,7 +66,7 @@ public class ASRSLooped : Machine
     public override void Load(Box box, Vector3 pos)
     {
         base.Load(box, pos);
-        
+        Debug.Log($"ASRS Looped Load {id}");
         productDatas.Add(box.productData);
         ProductManager.Instance.RemoveBox(box);
         
@@ -71,11 +74,7 @@ public class ASRSLooped : Machine
 
     public override void Unload(Box box, Machine at)
     {
-        Debug.Log("ASRS Looped Unload () 함수 호출 ");
-
         at.Load(box,Vector3.zero);
-        
-        
     }
 
 } 

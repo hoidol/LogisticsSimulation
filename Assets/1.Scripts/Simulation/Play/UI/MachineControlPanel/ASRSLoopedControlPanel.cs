@@ -6,23 +6,24 @@ public class ASRSLoopedControlPanel : MachineControlPanel
     ASRSLooped asrsLooped;
     public TMP_Text speedText;
 
+
     public override void SetMachine(Machine machine)
     {
         base.SetMachine(machine);
         asrsLooped = machine as ASRSLooped;
-        speedText.text = asrsLooped.speed.ToString();
+        speedText.text = asrsLooped.speed.ToString() +"s";
     }
 
     public void OnClickedUp()
     {
         asrsLooped.speed += 0.25f;
-        speedText.text = asrsLooped.speed.ToString();
+        speedText.text = asrsLooped.speed.ToString() + "s";
     }
 
     public void OnClickedDown()
     {
         asrsLooped.speed -= 0.25f;
-        speedText.text = asrsLooped.speed.ToString();
+        speedText.text = asrsLooped.speed.ToString() + "s";
     }
 
     public void OnClickedPanel()

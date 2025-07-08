@@ -11,6 +11,7 @@ public class SimulationManager : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
         Instance = this;
         simulationModes = GetComponentsInChildren<SimulationMode>();
     }
@@ -28,6 +29,18 @@ public class SimulationManager : MonoBehaviour
         SetMode(SimulationModeType.Edit);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F9))
+        {
+            Time.timeScale += 1;
+        }
+        if (Input.GetKeyDown(KeyCode.F7))
+        {
+            Time.timeScale -= 1;
+        }
+    }
+
     public void SetMode(SimulationModeType type)
     {
         simulationModeType = type;
@@ -40,6 +53,8 @@ public class SimulationManager : MonoBehaviour
             StopSimulation();
         }
 
+        BoxDetailCanvas.Instance.gameObject.SetActive(false);
+        MachineDetailCanvas.Instance.gameObject.SetActive(false);
     }
 
     public void StartSimulation()

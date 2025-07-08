@@ -23,11 +23,6 @@ public class Conveyor : Machine
         EditMachine();
     }
 
-    public override void PlaySimulation()
-    {
-        base.PlaySimulation();
-        //StartCoroutine(CoProcess());
-    }
 
     public override void StopSimulation()
     {
@@ -86,20 +81,10 @@ public class Conveyor : Machine
 
         if(endLinkPoint.linkedMachines.Count >0)
             nextMachine = endLinkPoint.linkedMachines[0];
-
-        //float minDist = float.MaxValue;
-        //nextMachine = null;
-
-        //foreach (var lp in outLinkPoints)
-        //{
-        //    float dist = Vector3.Distance(endLinkPoint.transform.position, lp.transform.position);
-        //    if (dist < 1f && dist < minDist)
-        //    {
-        //        minDist = dist;
-        //        nextLinkPoint = lp;
-        //    }
-        //}
     }
+
+
+
     BoxCollider boxCollider;
     void OnDrawGizmos()
     {

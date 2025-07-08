@@ -5,6 +5,12 @@ public class OutPoint : Machine
 {
     public List<Box> stackedBoxs = new List<Box>();
     public int maxStackCount = 27; //maxStack이되면 3초 후 사라짐
+
+    public override void StopSimulation()
+    {
+        base.StopSimulation();
+        stackedBoxs.Clear();
+    }
     public override void Load(Box box, Vector3 pos)
     {
         base.Load(box, pos);
@@ -25,9 +31,9 @@ public class OutPoint : Machine
         Vector3 basePos = transform.position;
 
         // 박스 간 간격 (약간 여유 두기)
-        float spacingX = box.width + 0.01f;
-        float spacingY = box.height + 0.01f;
-        float spacingZ = box.deeth + 0.01f;
+        float spacingX = box.width * 2f + 0.01f;
+        float spacingY = box.height * 2f + 0.01f;
+        float spacingZ = box.deeth * 2f + 0.01f;
 
         // 위치 계산
         Vector3 localOffset = new Vector3(
@@ -42,7 +48,7 @@ public class OutPoint : Machine
 
         if (stackedBoxs.Count >= maxStackCount)
         {
-            MaxStack();
+            Invoke("FlushStack",3);
         }
 
     }
@@ -52,9 +58,17 @@ public class OutPoint : Machine
     }
 
 
-    public void MaxStack()
+    public void FlushStack()
     {
+        for(int i = stackedBoxs.Count-1;i >= stackedBoxs.Count; i++)
+        {
+            ProductManager.Instance.RemoveBox(stackedBoxs[i]);
+            
+        }
+        stackedBoxs.Clear();
 
     }
+
+
 
 }

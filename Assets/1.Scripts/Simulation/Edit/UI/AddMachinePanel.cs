@@ -5,6 +5,7 @@ using TMPro;
 public class AddMachinePanel : MonoBehaviour
 {
     public MachineName machineName;
+    public TMP_Text nameText;
     public TMP_Text countText;
     
     public void Awake()
@@ -14,6 +15,8 @@ public class AddMachinePanel : MonoBehaviour
 
     private void Start()
     {
+        
+        nameText.text = MachineManager.Instance.GetMachineInfo(machineName).name;
         UpdatePanel();
     }
 
@@ -25,7 +28,7 @@ public class AddMachinePanel : MonoBehaviour
             
         //}
 
-        countText.text = MachineManager.Instance.GetMachines(machineName).Count.ToString();
+        countText.text = MachineManager.Instance.GetMachines(machineName).Count.ToString() +"EA";
     }
 
     public void OnClickedButton()

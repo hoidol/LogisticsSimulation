@@ -4,9 +4,15 @@ public class AGVPickUpPoint : Machine
 {
     public AGV currentAGV;
 
+    public override void StopSimulation()
+    {
+        base.StopSimulation();
+        currentAGV = null;
+    }
+
     public void Standby(AGV agv)
     {
-        Debug.Log($"AGVPickUpPoint Standby() agv.id {agv.id}");
+        //Debug.Log($"AGVPickUpPoint Standby() agv.id {agv.id}");
         currentAGV = agv;
         agv.transform.position = transform.position;
         currentAGV.transform.forward = transform.forward;
